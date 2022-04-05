@@ -12,4 +12,4 @@ Yêu cầu: Docker, Nodejs
 ~ npm install
 
 ~ npm run start
-End-point: http://localhost:3333/heal-check
+End-point: http://localhost:3333/health-check

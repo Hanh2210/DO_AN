@@ -13,3 +13,9 @@ Yêu cầu: Docker, Nodejs
 
 ~ npm run start
 End-point: http://localhost:3333/health-check
+
+## Setup front-end
+~ cd carpark_frontend
+
+~ yarn dev
+

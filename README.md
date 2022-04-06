@@ -1,5 +1,5 @@
 # DO_AN
-Đồ án tốt nghiệp của Nguyễn Thị Hồng Hạnh
+Đồ án tốt nghiệp
 
 # Setup
 Yêu cầu: Docker, Nodejs

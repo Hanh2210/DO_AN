@@ -28,7 +28,7 @@
         <input class="parking-house" type="text" placeholder="Số giờ gửi" />
       </div>
     </div>
-    <div class="btn">
+    <div class="button">
       <button class="submit">Lưu</button>
     </div>
   </div>
@@ -87,13 +87,13 @@
     padding: 0 8px;
   }
 
-  .btn {
+  .button {
     position: absolute;
     width: 100%;
     bottom: 0;
   }
 
-  .btn .submit {
+  .button .submit {
     width: 100%;
     outline: none;
     background-color: #0074bf;

@@ -13,3 +13,16 @@ body {
   color: #000;
   font-weight: normal;
 }
+
+.btn {
+  outline: none;
+  background-color: #0074bf;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  width: 150px;
+  height: 40px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}

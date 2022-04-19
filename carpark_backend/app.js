@@ -6,7 +6,7 @@ const RouterApp = require("./src/components/controllers/router");
 const path = require("path");
 const HttpApp = require("./src/singleton/http");
 const { errorHandler } = require("./src/middleware/error-handler");
-const Errors = require("./src/constants/error-contanst");
+const Errors = require("./src/constants/error-constant");
 require("dotenv").config();
 
 const expressApp = ExpressApp.getInstance();

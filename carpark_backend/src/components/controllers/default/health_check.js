@@ -1,10 +1,11 @@
-const express = require("express");
+const { Router } = require("express");
 
 const path = "/health-check";
-const router = express.Router();
+const router = Router();
 
 router.get(path, async (req, res) => {
   res.send("ok");
 });
-const DefaultRouter = { path, router };
+
+const DefaultRouter = { router };
 module.exports = DefaultRouter;

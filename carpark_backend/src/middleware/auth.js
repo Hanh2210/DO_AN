@@ -1,3 +1,4 @@
+const Errors = require('../constants/error-constant');
 const jwtUtil = require('../utils/jwt')
 
 const authMiddleware = async (req, resp, next) => {
@@ -10,14 +11,14 @@ const authMiddleware = async (req, resp, next) => {
                 req.tokenDecode = tokenDecode;
                 next();
             } catch (e) {
-                console.log(e);
-                next('token invalid');
+                console.log(Errors.INVALID_TOKEN.message);
+                next(new Error(Errors.INVALID_TOKEN.message));
             }
         } else {
-           next('unauthorized');
+           next(new Error(Errors.UNAUTHORIZED.message));
         }
     } else {
-        next('unauthorized');
+        next(new Error(Errors.UNAUTHORIZED.message));
     }
 };
 

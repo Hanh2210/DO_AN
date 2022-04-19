@@ -1,9 +1,9 @@
-const Errors = require('../constants/error-contanst');
+const Errors = require("../constants/error-constant");
 
 const controllerHandler = controller => {
     return async (req, resp, next) => {
         try {
-            controller(req, resp, next);
+            await controller(req, resp, next);
         } catch (error) {
             next(error);
         }
@@ -11,14 +11,13 @@ const controllerHandler = controller => {
 };
 
 const errorHandler = (error, req, resp, next) => {
-    console.log('aa', error);
-    if(error in Errors.values()) {
-        console.log(`ERROR! status: ${error.status}, message: ${error.message}`);
-        resp.status(error.status).json(error);
+    const err = Object.values(Errors).find(e => e.message == error.message);
+    if(err) {
+        console.log(`ERROR! code: ${err.code}, message: ${err.message}`);
+        resp.status(err.code).json(err);
     } else {
-        const err = Errors.values().find(e => e.message == error.message);
-        console.log(`ERROR! status: ${err.status}, message: ${err.message}`);
-        resp.status(error.status).json(err);
+        console.log(`ERROR: ${JSON.stringify(error)}`);
+        resp.status(500).json({code: 500, message: error.message});
     }
 }
 

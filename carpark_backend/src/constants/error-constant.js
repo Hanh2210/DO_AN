@@ -20,7 +20,7 @@ const Errors = {
         message: 'Phonenumber already exists!'
     },
     PHONENUMBER_DOES_NOT_EXISTS: {
-        code: 400,
+        code: 404,
         message: 'Phonenumber does not exists!'
     },
     INVALID_TOKEN: {
@@ -36,8 +36,24 @@ const Errors = {
         message: 'Token expires!'
     },
     USER_DOES_NOT_EXISTS: {
-        code: 400,
+        code: 404,
         message: 'User does not exists!'
+    },
+    INVALID_CARPARKNAME: {
+        code: 400,
+        message: 'Invalid carpark name!'
+    },
+    INVALID_CARPARK_ADDRESS: {
+        code: 400,
+        message: 'Invalid carpark address!'
+    },
+    CARPARK_DOES_NOT_EXISTS: {
+        code: 404,
+        message: 'Carpark does not exists!'
+    },
+    SQL_ERROR: {
+        code: 500,
+        message: 'Some errors when executing!'
     }
 }
 

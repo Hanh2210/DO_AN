@@ -9,6 +9,17 @@ const authMiddleware = async (req, resp, next) => {
             try {
                 const tokenDecode = await jwtUtil.verifyToken(token);
                 req.tokenDecode = tokenDecode;
+
+                //check authorization 
+                if(req.route.path.startsWith('/admin')) {
+                    const roles = tokenDecode.roles.split(',').map(r => r.toUpperCase())
+                    
+                    if(!(roles.some(e => e == 'ADMIN'))) {
+                        next(new Error(Errors.UNAUTHORIZED.message));
+                        return
+                    }
+                }
+
                 next();
             } catch (e) {
                 console.log(Errors.INVALID_TOKEN.message);

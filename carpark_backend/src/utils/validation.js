@@ -16,6 +16,10 @@ const Validation = {
     validatePassword: (password) => {
         if(!password || password.length < 6) throw new Error(Errors.INVALID_PASSWORD.message);
     },
+    isEmptyString: (str) => {
+        if(!str || str.length == 0 || str.trim() == '') return true;
+        return false;
+    },
 };
 
 module.exports = Validation;

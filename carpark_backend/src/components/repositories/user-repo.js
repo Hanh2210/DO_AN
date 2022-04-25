@@ -9,6 +9,40 @@ const UserRepository = {
             .then(result => result.insertId)
             .catch(err => console.log(err));
     },
+    searchUser: async (searchKeyWord = '', page = 1, recordPerPage = 10) => {
+        //TODO filter
+        const statement = `SELECT * FROM tbl_user 
+            WHERE tbl_user.name LIKE CONCAT('%', ?, '%') 
+                OR tbl_user.address LIKE CONCAT('%', ?, '%') 
+                OR tbl_user.email LIKE CONCAT('%', ?, '%') 
+                OR tbl_user.phonenumber LIKE CONCAT('%', ?, '%')  
+                OR tbl_user.role LIKE CONCAT('%', ?, '%') 
+            LIMIT ?
+            OFFSET ?`;
+
+        return await query(statement, [searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord, recordPerPage, recordPerPage * (page - 1)])
+            .then(result => result)
+            .catch(err => {
+                console.log(err);
+                throw new Error(Errors.SQL_ERROR.message);   
+            });
+    },
+    countTotalCarparks: async (searchKeyWord = '') => {
+        //TODO filter
+        const statement = `SELECT COUNT(*) as total FROM tbl_user 
+        WHERE tbl_user.name LIKE CONCAT('%', ?, '%') 
+            OR tbl_user.address LIKE CONCAT('%', ?, '%') 
+            OR tbl_user.email LIKE CONCAT('%', ?, '%') 
+            OR tbl_user.phonenumber LIKE CONCAT('%', ?, '%')  
+            OR tbl_user.role LIKE CONCAT('%', ?, '%')`;
+
+        return await query(statement, [searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord])
+            .then(result => result)
+            .catch(err => {
+                console.log(err);
+                throw new Error(Errors.SQL_ERROR.message);   
+            });
+    },
     getById: async (id) => {
         const statement = `SELECT * FROM tbl_user WHERE tbl_user.id = ?`;
 

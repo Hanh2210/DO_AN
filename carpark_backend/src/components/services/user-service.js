@@ -68,6 +68,18 @@ const getDetailUser = async (id) => {
     return users[0];
 }
 
-const UserService = { register, login, editUser, getDetailUser }
+const searchUser = async (searchKeyword, page=1, recordPerPage=10) => {
+    const users = await UserRepository.searchUser(searchKeyword, page, recordPerPage);
+    const total = await UserRepository.countTotalUsers(searchKeyword).then(rs => rs[0].total);
+
+    return {
+        page: page,
+        recordsPerPage: recordPerPage,
+        total: total,
+        data: users
+    };
+}
+
+const UserService = { register, login, editUser, getDetailUser, searchUser }
 
 module.exports = UserService;

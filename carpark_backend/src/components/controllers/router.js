@@ -1,8 +1,9 @@
 const CarparkForAdminRouter = require("./admin/carpark-controller/router");
+const UserForAdminRouter = require("./admin/user-controller/router");
 const CarparkRouter = require("./carpark-controller/router");
 const DefaultRouter = require("./default/health_check");
 const UserRouter = require("./user-controller/router");
 
-const RouterApp = [DefaultRouter, UserRouter, CarparkForAdminRouter, CarparkRouter];
+const RouterApp = [DefaultRouter, UserForAdminRouter, UserRouter, CarparkForAdminRouter, CarparkRouter];
 
 module.exports = RouterApp;

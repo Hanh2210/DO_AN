@@ -58,7 +58,12 @@ const login = async (phonenumber, password) => {
 
 const editUser = async (user) => {
     await UserRepository.updateUser(user);
-    return {};
+    UserRepository.getById(user.id)
+        .then(rs => rs)
+        .catch(err => {
+            console.log(JSON.stringify(err));
+            throw new Error(Errors.SQL_ERROR.message);
+        })
 }
 
 const getDetailUser = async (id) => {

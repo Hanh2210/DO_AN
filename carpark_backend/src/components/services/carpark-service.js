@@ -55,7 +55,7 @@ const updateCarpark = async (carpark) => {
 
     await CarparkRepository.updateCarpark(carpark);
 
-    const carparkAfterUpdate = await CarparkRepository.getById(carpark.id)[0];
+    const carparkAfterUpdate = (await CarparkRepository.getById(carpark.id))[0];
 
     return carparkAfterUpdate;
 }

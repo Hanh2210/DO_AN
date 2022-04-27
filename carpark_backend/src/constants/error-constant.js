@@ -54,7 +54,35 @@ const Errors = {
     SQL_ERROR: {
         code: 500,
         message: 'Some errors when executing!'
-    }
+    },
+    IDUSER_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'idUser cannot be empty!'
+    },
+    VEHICLE_TYPE_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'Vehicle type cannot be empty!'
+    },
+    VEHICLE_TYPE_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'Vehicle type cannot be empty!'
+    },
+    LINCENSE_PLATE_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'Lincense plate cannot be empty!'
+    },
+    VEHICLE_COLOR_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'Vehicle color cannot be empty!'
+    },
+    VEHICLE_BRANCH_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'Vehicle color cannot be empty!'
+    },
+    VEHICLE_DOES_NOT_EXISTS: {
+        code: 400,
+        message: 'Vehicle dose not exists!'
+    },
 }
 
 module.exports = Errors;

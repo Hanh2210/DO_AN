@@ -21,3 +21,7 @@ npm run dev
 
 ~ yarn dev
 
+#react native
+npx react-native run android
+npx react-native start
+

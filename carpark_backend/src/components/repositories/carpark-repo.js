@@ -1,5 +1,6 @@
 const Errors = require("../../constants/error-constant");
 const { query } = require("../../utils/query");
+const { CarPark } = require("../models/carpark");
 
 const CarparkRepository = {
     insertCarpark: async (carpark) => {
@@ -17,7 +18,9 @@ const CarparkRepository = {
         const statement = `SELECT * FROM tbl_carpark WHERE tbl_carpark.id = ?`;
 
         return await query(statement, id)
-            .then(result => result)
+            .then(results => {
+                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.openTime, carpark.closingTime, carpark.status));
+            })
             .catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   
@@ -63,8 +66,9 @@ const CarparkRepository = {
             OFFSET ?`;
 
         return await query(statement, [searchKeyWord, searchKeyWord, recordPerPage, recordPerPage * (page - 1)])
-            .then(result => result)
-            .catch(err => {
+            .then(results => {
+                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.openTime, carpark.closingTime, carpark.status));
+            }).catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   
             });
@@ -96,8 +100,9 @@ const CarparkRepository = {
             OFFSET ?`;
 
         return await query(statement, [searchKeyWord, searchKeyWord, recordPerPage, recordPerPage * (page - 1)])
-            .then(result => result)
-            .catch(err => {
+            .then(results => {
+                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.openTime, carpark.closingTime, carpark.status));
+            }).catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   
             });

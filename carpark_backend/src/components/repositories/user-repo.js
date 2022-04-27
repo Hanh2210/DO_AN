@@ -1,4 +1,5 @@
 const { query } = require("../../utils/query");
+const { User } = require("../models/user");
 
 const UserRepository = {
     insertUser: async (user) => {
@@ -21,7 +22,9 @@ const UserRepository = {
             OFFSET ?`;
 
         return await query(statement, [searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord, recordPerPage, recordPerPage * (page - 1)])
-            .then(result => result)
+            .then(results => {
+                return results.map(user => new User(user.id, user.name, user.address, user.email, user.phonenumber, user.password, user.roles, user.status));
+            })
             .catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   
@@ -47,14 +50,18 @@ const UserRepository = {
         const statement = `SELECT * FROM tbl_user WHERE tbl_user.id = ?`;
 
         return await query(statement, id)
-            .then(result => result)
+            .then(results => {
+                return results.map(user => new User(user.id, user.name, user.address, user.email, user.phonenumber, user.password, user.roles, user.status));
+            })
             .catch(err => console.log(err));
     },
     getByPhonenumber: async (phonenumber) => {
         const statement = `SELECT * FROM tbl_user WHERE tbl_user.phonenumber = ?`;
 
         return await query(statement, phonenumber)
-            .then(result => result)
+            .then(results => {
+                return results.map(user => new User(user.id, user.name, user.address, user.email, user.phonenumber, user.password, user.roles, user.status));
+            })
             .catch(err => console.log(err));
     },
     updateUser: async function (user) {

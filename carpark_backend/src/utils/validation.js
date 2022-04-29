@@ -9,7 +9,7 @@ const Validation = {
     },
     validateUsername: (username) => {
         if(!username) throw Error(Errors.INVALID_USERNAME.message);
-        let regex = new RegExp(/^[a-zA-Z0-9_]+$/);
+        let regex = new RegExp(/^[a-zA-Z0-9_\s]+$/);
         const result = regex.test(username);
         if(!result) throw new Error(Errors.INVALID_USERNAME.message);
     },

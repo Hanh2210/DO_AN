@@ -50,6 +50,7 @@ const login = async (phonenumber, password) => {
         const tokenInfo = {
             accessToken: token,
             refreshToken: refreshToken,
+            roles: user.roles,
             expiresAt: new Date(Date.now() + JWT_CONSTANT.EXPIRES_OF_TOKEN)
         }
         return tokenInfo;

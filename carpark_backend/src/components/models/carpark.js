@@ -4,11 +4,15 @@ const CARPARK_STATUS = {
     DELETED: 0
 };
 
-function CarPark(id, name, address, numberOfEmptySlots, openTime, closingTime, status) {
+function CarPark(id, name, address, numberOfEmptySlots, totalSlots, price, longitude, latitude, openTime, closingTime, status) {
     this.id = id;
     this.name = name;
     this.address = address;
     this.numberOfEmptySlots = numberOfEmptySlots;
+    this.totalSlots = totalSlots;
+    this.price = price;
+    this.longitude = longitude;
+    this.latitude = latitude;
     this.openTime = openTime;
     this.closingTime = closingTime;
     this.status = status;

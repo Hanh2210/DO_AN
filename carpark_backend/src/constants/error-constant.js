@@ -47,6 +47,14 @@ const Errors = {
         code: 400,
         message: 'Invalid carpark address!'
     },
+    INVALID_CARPARK_TOTAL_SLOTS: {
+        code: 400,
+        message: 'Invalid carpark total slots!'
+    },
+    INVALID_CARPARK_PRICE: {
+        code: 400,
+        message: 'Invalid carpark price!'
+    },
     CARPARK_DOES_NOT_EXISTS: {
         code: 404,
         message: 'Carpark does not exists!'

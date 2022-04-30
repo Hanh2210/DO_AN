@@ -5,6 +5,8 @@ const CarparkRepository = require("../repositories/carpark-repo");
 const addCarpark = async (carparkRequest) => {
     if(!carparkRequest.name) throw new Error(Errors.INVALID_CARPARKNAME.message);
     if(!carparkRequest.address) throw new Error(Errors.INVALID_CARPARK_ADDRESS.message);
+    if(!carparkRequest.totalSlots) throw new Error(Errors.INVALID_CARPARK_TOTAL_SLOTS.message);
+    if(!carparkRequest.price) throw new Error(Errors.INVALID_CARPARK_PRICE.message);
 
     carparkRequest.status = CARPARK_STATUS.ACTIVE;
     const idCarpark = await CarparkRepository.insertCarpark(carparkRequest);
@@ -15,7 +17,11 @@ const addCarpark = async (carparkRequest) => {
 }
 
 const searchCarpark = async (searchKeyword, page=1, recordPerPage=10) => {
-    const carparks = await CarparkRepository.searchCarpark(searchKeyword, page, recordPerPage);
+    const carparks = await CarparkRepository.searchCarpark(searchKeyword, page, recordPerPage)
+        .then(rs => rs.map(carpark => {
+            carpark['numberOfUsedSlots'] = carpark.totalSlots - carpark.numberOfEmptySlots;
+            return carpark;
+        }));
     const total = await CarparkRepository.countTotalCarparks(searchKeyword).then(rs => rs[0].total);
 
     return {
@@ -27,15 +33,23 @@ const searchCarpark = async (searchKeyword, page=1, recordPerPage=10) => {
 }
 
 const detailCarpark = async (id) => {
-    const carparks = await CarparkRepository.getById(id);
+    const carparks = await CarparkRepository.getById(id)
+        .then(rs => rs.map(carpark => {
+            carpark['numberOfUsedSlots'] = carpark.totalSlots - carpark.numberOfEmptySlots;
+            return carpark;
+        }));;
     if(carparks.length == 0) throw new Error(Errors.CARPARK_DOES_NOT_EXISTS.message);
 
     return carparks[0];
 }
 
 const searchCarparkForUser = async (searchKeyword='', page=1, recordPerPage=10) => {
-    const carparks = await CarparkRepository.searchCarparkForUser(searchKeyword, page, recordPerPage);
-    const total = await CarparkRepository.countTotalCarparks(searchKeyword).then(rs => rs[0].total);
+    const carparks = await CarparkRepository.searchCarparkForUser(searchKeyword, page, recordPerPage)
+        .then(rs => rs.map(carpark => {
+            carpark['numberOfUsedSlots'] = carpark.totalSlots - carpark.numberOfEmptySlots;
+            return carpark;
+        }));;
+    const total = await CarparkRepository.countTotalCarparksForUser(searchKeyword).then(rs => rs[0].total);
 
     return {
         page: page,
@@ -51,11 +65,22 @@ const updateCarpark = async (carpark) => {
 
     if(!carpark.name) carpark.name = carparks[0].name;
     if(!carpark.address) carpark.address = carparks[0].address;
+    if(!carpark.totalSlots) carpark.totalSlots = carparks[0].totalSlots;
+    if(!carpark.price) carpark.price = carparks[0].price;
     if(!carpark.status) carpark.status = carparks[0].status;
 
     await CarparkRepository.updateCarpark(carpark);
 
-    const carparkAfterUpdate = (await CarparkRepository.getById(carpark.id))[0];
+    const carparkAfterUpdate = await CarparkRepository.getById(carpark.id)
+        .then(rs => rs.map(carpark => {
+            carpark['numberOfUsedSlots'] = carpark.totalSlots - carpark.numberOfEmptySlots;
+            return carpark;
+        }))
+        .then(rs => rs[0])
+        .catch(err => {
+            console.log('err', JSON.stringify(err));
+            throw new Error(err.message);
+        });
 
     return carparkAfterUpdate;
 }
@@ -65,7 +90,7 @@ const deleteCarpark = async (carpark) => {
     if(carparks.length == 0) throw new Error(Errors.CARPARK_DOES_NOT_EXISTS.message);
 
     carpark.status = CARPARK_STATUS.DELETED;
-    console.log(carpark);
+   
     await CarparkRepository.updateCarpark(carpark);
 
     return {};

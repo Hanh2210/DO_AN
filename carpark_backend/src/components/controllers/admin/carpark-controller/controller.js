@@ -3,9 +3,9 @@ const { CarPark } = require("../../../models/carpark");
 const CarparkService = require("../../../services/carpark-service");
 
 const addNewCarpark = async (req, resp) => {
-    const { name, address, numberOfEmptySlots, openTime, closingTime } = req.body;
+    const { name, address, numberOfEmptySlots, totalSlots, price, longitude, latitude, openTime, closingTime } = req.body;
     
-    const carparkRequest = new CarPark(undefined, name, address, numberOfEmptySlots, openTime, closingTime)
+    const carparkRequest = new CarPark(undefined, name, address, numberOfEmptySlots, totalSlots, price, longitude, latitude, openTime, closingTime)
     await CarparkService.addCarpark(carparkRequest)
         .then(rs => rs)
         .then(rs => commonResponse(resp, rs));
@@ -27,9 +27,9 @@ const detailCarpark = async (req, resp) => {
 
 const updateCarpark = async (req, resp) => {
     const { id } = req.params;
-    const { name, address, numberOfEmptySlots, openTime, closingTime } = req.body;
+    const { name, address, numberOfEmptySlots, totalSlots, price, longitude, latitude, openTime, closingTime } = req.body;
     
-    const carparkRequest = new CarPark(id, name, address, numberOfEmptySlots, openTime, closingTime)
+    const carparkRequest = new CarPark(id, name, address, numberOfEmptySlots, totalSlots, price, longitude, latitude, openTime, closingTime)
     await CarparkService.updateCarpark(carparkRequest)
         .then(rs => rs)
         .then(rs => commonResponse(resp, rs));

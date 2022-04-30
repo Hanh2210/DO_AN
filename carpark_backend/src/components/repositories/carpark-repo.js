@@ -4,10 +4,10 @@ const { CarPark } = require("../models/carpark");
 
 const CarparkRepository = {
     insertCarpark: async (carpark) => {
-        const statement = `INSERT INTO tbl_carpark(name, address, numberOfEmptySlots, openTime, closingTime, status)
-            VALUES (?, ?, ?, ?, ?, ?)`;
+        const statement = `INSERT INTO tbl_carpark(name, address, numberOfEmptySlots, totalSlots, price, longitude, latitude, openTime, closingTime, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     
-        return await query(statement, [carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.openTime, carpark.closingTime, carpark.status])
+        return await query(statement, [carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.totalSlots, carpark.price, carpark.longitude, carpark.latitude, carpark.openTime, carpark.closingTime, carpark.status])
             .then(result => result.insertId)
             .catch(err => {
                 console.log(err);
@@ -19,7 +19,7 @@ const CarparkRepository = {
 
         return await query(statement, id)
             .then(results => {
-                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.openTime, carpark.closingTime, carpark.status));
+                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.totalSlots, carpark.price, carpark.longitude, carpark.latitude, carpark.openTime, carpark.closingTime, carpark.status));
             })
             .catch(err => {
                 console.log(err);
@@ -33,6 +33,10 @@ const CarparkRepository = {
             SET tbl_carpark.name = ?, 
                 tbl_carpark.address = ?, 
                 tbl_carpark.numberOfEmptySlots = ?, 
+                tbl_carpark.totalSlots = ?, 
+                tbl_carpark.price = ?,
+                tbl_carpark.longitude = ?,
+                tbl_carpark.latitude = ?,
                 tbl_carpark.openTime = ?, 
                 tbl_carpark.closingTime = ?, 
                 tbl_carpark.status = ?
@@ -47,6 +51,18 @@ const CarparkRepository = {
 
         if(carpark.numberOfEmptySlots) params.push(carpark.numberOfEmptySlots)
         else params.push(tempCarpark.numberOfEmptySlots);
+
+        if(carpark.totalSlots) params.push(carpark.totalSlots)
+        else params.push(tempCarpark.totalSlots);
+
+        if(carpark.price) params.push(carpark.price)
+        else params.push(tempCarpark.price);
+
+        if(carpark.longitude) params.push(carpark.longitude)
+        else params.push(tempCarpark.longitude);
+
+        if(carpark.latitude) params.push(carpark.latitude)
+        else params.push(tempCarpark.latitude);
 
         if(carpark.openTime) params.push(carpark.openTime)
         else params.push(tempCarpark.openTime);
@@ -76,7 +92,7 @@ const CarparkRepository = {
 
         return await query(statement, [searchKeyWord, searchKeyWord, recordPerPage, recordPerPage * (page - 1)])
             .then(results => {
-                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.openTime, carpark.closingTime, carpark.status));
+                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.totalSlots, carpark.price, carpark.longitude, carpark.latitude, carpark.openTime, carpark.closingTime, carpark.status));
             }).catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   
@@ -99,7 +115,7 @@ const CarparkRepository = {
         //TODO filter
         const statement = `SELECT * FROM tbl_carpark 
             WHERE
-                tbl_carpark.status != 0
+                tbl_carpark.status = 1
                 AND 
                 (
                     tbl_carpark.name LIKE CONCAT('%', ?, '%')
@@ -110,7 +126,7 @@ const CarparkRepository = {
 
         return await query(statement, [searchKeyWord, searchKeyWord, recordPerPage, recordPerPage * (page - 1)])
             .then(results => {
-                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.openTime, carpark.closingTime, carpark.status));
+                return results.map(carpark => new CarPark(carpark.id, carpark.name, carpark.address, carpark.numberOfEmptySlots, carpark.totalSlots, carpark.price, carpark.longitude, carpark.latitude, carpark.openTime, carpark.closingTime, carpark.status));
             }).catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   

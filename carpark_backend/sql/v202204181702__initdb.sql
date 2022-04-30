@@ -75,3 +75,9 @@ create table if not exists tbl_parking_ticket_infor
 
 alter table tbl_parking_ticket_infor
     add primary key (id);
+
+alter table tbl_carpark
+    add totalSlots int not null default 0,
+    add price int not null default 0,
+    add longitude float,
+    add latitude float;

@@ -78,7 +78,14 @@ const VehicleRepository = {
     updateVehicle: async function (vehicle) {
         const tempVehicle = await this.getById(vehicle.id).then(rs => rs[0]);
 
-        const statement = `UPDATE tbl_vehicle SET tbl_vehicle.id_user = ?, tbl_vehicle.type = ?, tbl_vehicle.lincense_plate = ?, tbl_vehicle.color = ?, tbl_vehicle.vehicle_brand = ?, tbl_vehicle.status = ?`
+        const statement = `UPDATE tbl_vehicle 
+            SET tbl_vehicle.id_user = ?, 
+                tbl_vehicle.type = ?, 
+                tbl_vehicle.lincense_plate = ?, 
+                tbl_vehicle.color = ?, 
+                tbl_vehicle.vehicle_brand = ?, 
+                tbl_vehicle.status = ?
+            WHERE tbl_vehicle.id = ?`
         
         const params = [];
 
@@ -100,6 +107,8 @@ const VehicleRepository = {
         if(vehicle.status) params.push(vehicle.status)
         else params.push(tempVehicle.status);
         
+        params.push(vehicle.id);
+
         return await query(statement, params)
             .then(result => result)
             .catch(err => {

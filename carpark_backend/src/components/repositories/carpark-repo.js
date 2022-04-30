@@ -29,7 +29,14 @@ const CarparkRepository = {
     updateCarpark: async function (carpark) {
         const tempCarpark = await this.getById(carpark.id).then(rs => rs[0]);
         
-        const statement = `UPDATE tbl_carpark SET tbl_carpark.name = ?, tbl_carpark.address = ?, tbl_carpark.numberOfEmptySlots = ?, tbl_carpark.openTime = ?, tbl_carpark.closingTime = ?, tbl_carpark.status = ?`
+        const statement = `UPDATE tbl_carpark 
+            SET tbl_carpark.name = ?, 
+                tbl_carpark.address = ?, 
+                tbl_carpark.numberOfEmptySlots = ?, 
+                tbl_carpark.openTime = ?, 
+                tbl_carpark.closingTime = ?, 
+                tbl_carpark.status = ?
+            WHERE tbl_carpark.id = ?`
         const params = [];
 
         if(carpark.name) params.push(carpark.name)
@@ -49,6 +56,8 @@ const CarparkRepository = {
 
         if(carpark.status != undefined) params.push(carpark.status)
         else params.push(tempCarpark.status);
+
+        params.push(carpark.id);
         
         return await query(statement, params)
             .then(result => result)

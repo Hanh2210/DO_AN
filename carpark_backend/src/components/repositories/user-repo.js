@@ -1,3 +1,4 @@
+const Errors = require("../../constants/error-constant");
 const { query } = require("../../utils/query");
 const { User } = require("../models/user");
 
@@ -17,7 +18,7 @@ const UserRepository = {
                 OR tbl_user.address LIKE CONCAT('%', ?, '%') 
                 OR tbl_user.email LIKE CONCAT('%', ?, '%') 
                 OR tbl_user.phonenumber LIKE CONCAT('%', ?, '%')  
-                OR tbl_user.role LIKE CONCAT('%', ?, '%') 
+                OR tbl_user.roles LIKE CONCAT('%', ?, '%') 
             LIMIT ?
             OFFSET ?`;
 
@@ -30,14 +31,14 @@ const UserRepository = {
                 throw new Error(Errors.SQL_ERROR.message);   
             });
     },
-    countTotalCarparks: async (searchKeyWord = '') => {
+    countTotalUsers: async (searchKeyWord = '') => {
         //TODO filter
         const statement = `SELECT COUNT(*) as total FROM tbl_user 
         WHERE tbl_user.name LIKE CONCAT('%', ?, '%') 
             OR tbl_user.address LIKE CONCAT('%', ?, '%') 
             OR tbl_user.email LIKE CONCAT('%', ?, '%') 
             OR tbl_user.phonenumber LIKE CONCAT('%', ?, '%')  
-            OR tbl_user.role LIKE CONCAT('%', ?, '%')`;
+            OR tbl_user.roles LIKE CONCAT('%', ?, '%')`;
 
         return await query(statement, [searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord, searchKeyWord])
             .then(result => result)
@@ -67,7 +68,15 @@ const UserRepository = {
     updateUser: async function (user) {
         const tempUser = await this.getById(user.id).then(rs => rs[0]);
         
-        const statement = `UPDATE tbl_user SET tbl_user.name = ?, tbl_user.address = ?, tbl_user.email = ?, tbl_user.phonenumber = ?, tbl_user.password = ?, tbl_user.roles = ?, tbl_user.status = ?`
+        const statement = `UPDATE tbl_user 
+            SET tbl_user.name = ?, 
+                tbl_user.address = ?, 
+                tbl_user.email = ?, 
+                tbl_user.phonenumber = ?, 
+                tbl_user.password = ?, 
+                tbl_user.roles = ?, 
+                tbl_user.status = ?
+            WHERE tbl_user.id = ?`
         const params = [];
 
         if(user.name) params.push(user.name)
@@ -91,6 +100,8 @@ const UserRepository = {
         if(user.status) params.push(user.status)
         else params.push(tempUser.status);
         
+        params.push(user.id);
+
         return await query(statement, params)
             .then(result => result)
             .catch(err => console.log(err));

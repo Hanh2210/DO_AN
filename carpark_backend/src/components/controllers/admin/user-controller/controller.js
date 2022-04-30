@@ -1,3 +1,4 @@
+const commonResponse = require("../../../../utils/common-response");
 const UserService = require("../../../services/user-service");
 
 const searchUser = async (req, resp) => {

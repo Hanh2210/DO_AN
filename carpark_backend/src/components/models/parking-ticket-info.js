@@ -1,5 +1,8 @@
 const PARKING_TICKET_INFOR_STATUS = {
-    USING: 1,
+    PENDING: 1,
+    USING: 2,
+    REJECT: 3,
+    CANCELED: 4,
     USED: 0
 };
 

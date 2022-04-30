@@ -64,7 +64,7 @@ create table if not exists tbl_parking_ticket_infor
     start_time     time default '00:00:00',
     end_time       time default '23:59:59',
     price          int                not null,
-    status         smallint default 1 not null comment 'active: 1, deleted: 0',
+    status         smallint default 1 not null comment 'pending: 1, using: 2, reject: 3, canceled: 4, used: 0',
     constraint tbl_parking_ticket_infor_id_uindex
         unique (id),
     constraint tbl_parking_ticket_infor_tbl_vehicle_fk
@@ -81,3 +81,7 @@ alter table tbl_carpark
     add price int not null default 0,
     add longitude float,
     add latitude float;
+    
+alter table tbl_parking_ticket_infor
+    change column start_time start_time datetime,
+    change column end_time end_time datetime; 

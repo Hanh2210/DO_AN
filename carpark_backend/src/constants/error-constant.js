@@ -91,6 +91,38 @@ const Errors = {
         code: 400,
         message: 'Vehicle dose not exists!'
     },
+    IDVEHICLE_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'idVehicle cannot be empty!'
+    },
+    IDCARPARK_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'idCarpark cannot be empty!'
+    },
+    TICKET_DOES_NOT_EXISTS: {
+        code: 404,
+        message: 'Parking ticket id does not exists!'
+    },
+    TICKET_IS_REJECTED_BECAUSE_CARPARK_IS_FULL: {
+        code: 400,
+        message: 'Parking ticket is rejected because the carpark is full!'
+    },
+    TICKET_CAN_NOT_CANCEL: {
+        code: 400,
+        message: 'Tickets cannot be canceled!'
+    },
+    TICKET_CAN_NOT_APPROVED: {
+        code: 400,
+        message: 'This ticket cannot be approved!'
+    },
+    TICKET_CAN_NOT_REJECTED: {
+        code: 400,
+        message: 'This ticket cannot be rejected!'
+    },
+    TICKET_CAN_NOT_RETURN: {
+        code: 400,
+        message: 'This ticket cannot be return!'
+    },
 }
 
 module.exports = Errors;

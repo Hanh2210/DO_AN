@@ -123,6 +123,14 @@ const Errors = {
         code: 400,
         message: 'This ticket cannot be return!'
     },
+    REFRESH_TOKEN_CANNOT_BE_NULL: {
+        code: 400,
+        message: 'Refresh token cannot be empty!'
+    },
+    CHANGE_PASSWORD_FAIL: {
+        code: 400,
+        message: 'Change password fail!'
+    },
 }
 
 module.exports = Errors;

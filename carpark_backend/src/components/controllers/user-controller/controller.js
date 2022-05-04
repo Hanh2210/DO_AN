@@ -19,6 +19,30 @@ const loginController = async (req, resp) => {
     commonResponse(resp, responseData);
 }
 
+const logoutController = async (req, resp) => {
+    if(!req.token) throw new Error(Errors.UNAUTHORIZED.message);
+    if(!req.tokenDecode.idUser) throw new Error(Errors.UNAUTHORIZED.message);
+    const responseData = await UserService.logout(req.tokenDecode.idUser, req.token);
+
+    commonResponse(resp, responseData);
+}
+
+const generateAccessTokenController = async (req, resp) => {
+    const { refreshToken } = req.body;
+    
+    const responseData = await UserService.generateAccessToken(refreshToken);
+
+    commonResponse(resp, responseData);
+}
+
+const changePasswordController = async (req, resp) => {
+    const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+    const responseData = await UserService.changePassword(req.tokenDecode.idUser, oldPassword, newPassword, confirmNewPassword);
+
+    commonResponse(resp, responseData);
+}
+
 const editUserController = async (req, resp) => {
     const { id, name, address, email, phonenumber } = req.body;
 
@@ -47,4 +71,5 @@ const getUserDetail = async (req, resp) => {
     commonResponse(resp, userResponse);
 }
 
-module.exports = { registerController, loginController, editUserController, getUserDetail}
+module.exports = { registerController, loginController, logoutController, generateAccessTokenController,
+    changePasswordController, editUserController, getUserDetail }

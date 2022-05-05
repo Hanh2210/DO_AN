@@ -1,3 +1,4 @@
+const { checkExistsToken } = require('../caches/token');
 const Errors = require('../constants/error-constant');
 const jwtUtil = require('../utils/jwt')
 
@@ -9,6 +10,13 @@ const authMiddleware = async (req, resp, next) => {
             try {
                 const tokenDecode = await jwtUtil.verifyToken(token);
                 req.tokenDecode = tokenDecode;
+                req.token = token;
+                //check token in redis
+                const exists = await checkExistsToken(tokenDecode.idUser, token.split('.')[2]);
+                if(!exists) {
+                    next(new Error(Errors.UNAUTHORIZED.message));
+                    return
+                }
 
                 //check authorization 
                 if(req.route.path.startsWith('/admin')) {

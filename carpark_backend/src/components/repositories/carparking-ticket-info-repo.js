@@ -1,6 +1,7 @@
 const Errors = require("../../constants/error-constant");
 const { query } = require("../../utils/query");
 const { ParkingTicketInfo } = require("../models/parking-ticket-info");
+const { ReportTotalPriceInYear } = require("../models/report");
 
 const CarparkingTicketInfoRepository = {
     insertTicket: async (ticketInfor) => {
@@ -216,6 +217,51 @@ const CarparkingTicketInfoRepository = {
 
         return await query(statement, [idTicket, idUser])
             .then(result => result.countTicket)
+            .catch(err => {
+                console.log(err);
+                throw new Error(Errors.SQL_ERROR.message);   
+            });
+    },
+    reportForAdmin: async (year) => {
+        const statement = `SELECT temp_table_month_price.month, SUM(temp_table_month_price.price) as total_price
+        FROM  
+            (
+                SELECT    
+                    MONTH(tbl_parking_ticket_infor.end_time) as month,   
+                    tbl_parking_ticket_infor.price as price  
+                FROM tbl_parking_ticket_infor  
+                WHERE 
+                    YEAR(tbl_parking_ticket_infor.end_time) = ?
+                    AND tbl_parking_ticket_infor.status = 0) as temp_table_month_price
+        GROUP BY month`;
+
+        return await query(statement, [year])
+            .then(results => {
+                return results.map(rs => new ReportTotalPriceInYear(rs.month, rs.total_price))
+            })
+            .catch(err => {
+                console.log(err);
+                throw new Error(Errors.SQL_ERROR.message);   
+            });
+    },
+    reportForUser: async (idUser, year) => {
+        const statement = `SELECT temp_table_month_price.month, SUM(temp_table_month_price.price) as total_price
+        FROM  
+            (SELECT    
+                MONTH(tbl_parking_ticket_infor.end_time) as month,   
+                tbl_parking_ticket_infor.price as price  
+            FROM tbl_parking_ticket_infor  
+				INNER JOIN tbl_vehicle ON tbl_vehicle.id = tbl_parking_ticket_infor.id_vehicle
+            WHERE 
+				tbl_vehicle.id_user = ?
+                AND YEAR(tbl_parking_ticket_infor.end_time) = ?
+                AND tbl_parking_ticket_infor.status = 0) as temp_table_month_price
+        GROUP BY month`;
+
+        return await query(statement, [idUser, year])
+            .then(results => {
+                return results.map(rs => new ReportTotalPriceInYear(rs.month, rs.total_price))
+            })
             .catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   

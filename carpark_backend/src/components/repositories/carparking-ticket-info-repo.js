@@ -15,12 +15,31 @@ const CarparkingTicketInfoRepository = {
             });
     },
     getById: async (id) => {
-        const statement = `SELECT * FROM tbl_parking_ticket_infor WHERE tbl_parking_ticket_infor.id = ?`;
+        const statement = `SELECT tbl_parking_ticket_infor.id, tbl_parking_ticket_infor.id_vehicle, 
+                tbl_parking_ticket_infor.id_carpark, tbl_parking_ticket_infor.start_time, 
+                tbl_parking_ticket_infor.end_time, tbl_parking_ticket_infor.price, tbl_parking_ticket_infor.status,
+                tbl_vehicle.lincense_plate, tbl_vehicle.vehicle_brand,
+                tbl_carpark.name, tbl_carpark.address 
+            FROM tbl_parking_ticket_infor 
+                INNER JOIN tbl_vehicle ON tbl_parking_ticket_infor.id_vehicle = tbl_vehicle.id
+                INNER JOIN tbl_carpark ON tbl_parking_ticket_infor.id_carpark = tbl_carpark.id
+            WHERE tbl_parking_ticket_infor.id = ?`;
 
         return await query(statement, id)
             .then(results => {
-                return results.map(ticketInfor => new ParkingTicketInfo(ticketInfor.id, ticketInfor.id_vehicle, ticketInfor.id_carpark,
-                    ticketInfor.start_time, ticketInfor.end_time, ticketInfor.price, ticketInfor.status));
+                return results.map(ticketInfor => {
+                    const ticket = new ParkingTicketInfo(ticketInfor.id, ticketInfor.id_vehicle, ticketInfor.id_carpark,
+                    ticketInfor.start_time, ticketInfor.end_time, ticketInfor.price, ticketInfor.status);
+                    ticket.vehicle = {
+                        lincensePlate: ticketInfor.lincense_plate,
+                        vehicleBrand: ticketInfor.vehicle_brand,
+                    };
+                    ticket.carpark = {
+                        name: ticketInfor.name,
+                        address: ticketInfor.address
+                    }
+                    return ticket;
+                });
             })
             .catch(err => {
                 console.log(err);
@@ -43,16 +62,17 @@ const CarparkingTicketInfoRepository = {
         return await query(statement, [id, idUser])
             .then(results => {
                 return results.map(ticketInfor => {
-                    const tiket = new ParkingTicketInfo(ticketInfor.id, ticketInfor.id_vehicle, ticketInfor.id_carpark,
+                    const ticket = new ParkingTicketInfo(ticketInfor.id, ticketInfor.id_vehicle, ticketInfor.id_carpark,
                     ticketInfor.start_time, ticketInfor.end_time, ticketInfor.price, ticketInfor.status);
-                    tiket.vehicle = {
+                    ticket.vehicle = {
                         lincensePlate: ticketInfor.lincense_plate,
                         vehicleBrand: ticketInfor.vehicle_brand,
                     };
-                    tiket.carpark = {
+                    ticket.carpark = {
                         name: ticketInfor.name,
                         address: ticketInfor.address
                     }
+                    return ticket;
                 });
             })
             .catch(err => {
@@ -62,14 +82,32 @@ const CarparkingTicketInfoRepository = {
     },
     searchTicket: async (page = 1, recordPerPage = 10) => {
         //TODO filter
-        const statement = `SELECT * FROM tbl_parking_ticket_infor 
+        const statement = `SELECT tbl_parking_ticket_infor.id, tbl_parking_ticket_infor.id_vehicle, 
+                tbl_parking_ticket_infor.id_carpark, tbl_parking_ticket_infor.start_time, 
+                tbl_parking_ticket_infor.end_time, tbl_parking_ticket_infor.price, tbl_parking_ticket_infor.status,
+                tbl_vehicle.lincense_plate, tbl_vehicle.vehicle_brand,
+                tbl_carpark.name, tbl_carpark.address 
+            FROM tbl_parking_ticket_infor 
+                INNER JOIN tbl_vehicle ON tbl_vehicle.id = tbl_parking_ticket_infor.id_vehicle
+                INNER JOIN tbl_carpark ON tbl_parking_ticket_infor.id_carpark = tbl_carpark.id
             LIMIT ?
             OFFSET ?`;
 
         return await query(statement, [recordPerPage, recordPerPage * (page - 1)])
             .then(results => {
-                return results.map(ticketInfor => new ParkingTicketInfo(ticketInfor.id, ticketInfor.id_vehicle, ticketInfor.id_carpark,
-                    ticketInfor.start_time, ticketInfor.end_time, ticketInfor.price, ticketInfor.status));    
+                return results.map(ticketInfor => {
+                    const ticket = new ParkingTicketInfo(ticketInfor.id, ticketInfor.id_vehicle, ticketInfor.id_carpark,
+                    ticketInfor.start_time, ticketInfor.end_time, ticketInfor.price, ticketInfor.status);
+                    ticket.vehicle = {
+                        lincensePlate: ticketInfor.lincense_plate,
+                        vehicleBrand: ticketInfor.vehicle_brand,
+                    };
+                    ticket.carpark = {
+                        name: ticketInfor.name,
+                        address: ticketInfor.address
+                    }
+                    return ticket;
+                });    
             }).catch(err => {
                 console.log(err);
                 throw new Error(Errors.SQL_ERROR.message);   

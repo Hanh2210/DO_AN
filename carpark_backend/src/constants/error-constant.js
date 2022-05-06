@@ -131,6 +131,10 @@ const Errors = {
         code: 400,
         message: 'Change password fail!'
     },
+    PARAM_YEAR_CAN_BE_NOT_NULL: {
+        code: 400,
+        message: 'Param "year" can be not null!'
+    },
 }
 
 module.exports = Errors;

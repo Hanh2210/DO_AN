@@ -1,4 +1,4 @@
-
+const Errors = require("../../../constants/error-constant");
 const commonResponse = require("../../../utils/common-response");
 const CarparkingTicketInfoService = require("../../services/carparking-ticket-info-service");
 
@@ -50,4 +50,16 @@ const returnTicket = async (req, resp) => {
         .then(rs => commonResponse(resp, rs));
 }
 
-module.exports = { bookTicket, searchTickets, detailTicket, cancelTicket, returnTicket }
+const reportController = async (req, resp) => {
+    const { idUser } = req.tokenDecode;
+    if(!idUser) throw new Error(Errors.UNAUTHORIZED.message);
+
+    const { year } = req.params;
+    if(!year) throw new Error(Errors.PARAM_YEAR_CAN_BE_NOT_NULL.message);
+
+    await CarparkingTicketInfoService.reportForUser(idUser, year)
+        .then(rs => rs)
+        .then(rs => commonResponse(resp, rs));
+}
+
+module.exports = { bookTicket, searchTickets, detailTicket, cancelTicket, returnTicket, reportController }

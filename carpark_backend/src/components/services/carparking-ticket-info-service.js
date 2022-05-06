@@ -172,6 +172,18 @@ const searchTicketsForUser = async (idUser, page=1, recordPerPage=10) => {
     };
 }
 
-const CarparkingTicketInfoService = { bookTicket, checkTicket, rejectTicket, returnTicket, cancelTicket, searchTickets, searchTicketsForUser, detailTicket, detailTicketForUser }
+const reportForAdmin = async (year) => {
+    const report = await CarparkingTicketInfoRepository.reportForAdmin(year);
+    return report;
+}
+
+const reportForUser = async (idUser, year) => {
+    const report = await CarparkingTicketInfoRepository.reportForUser(idUser, year);
+    return report;
+}
+
+const CarparkingTicketInfoService = { bookTicket, checkTicket, rejectTicket, returnTicket, cancelTicket, 
+    searchTickets, searchTicketsForUser, detailTicket, detailTicketForUser,
+    reportForAdmin, reportForUser }
 
 module.exports = CarparkingTicketInfoService;

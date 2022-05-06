@@ -1,3 +1,4 @@
+const Errors = require("../../../../constants/error-constant");
 const commonResponse = require("../../../../utils/common-response");
 const CarparkingTicketInfoService = require("../../../services/carparking-ticket-info-service");
 
@@ -29,4 +30,14 @@ const rejectTicket = async (req, resp) => {
         .then(rs => commonResponse(resp, rs));
 }
 
-module.exports = { searchTickets, detailTicket, checkTicket, rejectTicket }
+const reportForAdminController = async (req, resp) => {
+    const { year } = req.params;
+
+    if(!year) throw new Error(Errors.PARAM_YEAR_CAN_BE_NOT_NULL.message);
+
+    await CarparkingTicketInfoService.reportForAdmin(year)
+        .then(rs => rs)
+        .then(rs => commonResponse(resp, rs));
+}
+
+module.exports = { searchTickets, detailTicket, checkTicket, rejectTicket, reportForAdminController }

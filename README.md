@@ -1,5 +1,5 @@
 # DO_AN
-Đồ án tốt nghiệp
+Đồ án tốt nghiệp bản nháp =]]]
 
 # Setup
 Yêu cầu: Docker, Nodejs
